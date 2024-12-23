@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # PostgreSQL service
+  db:
+    image: postgres:13
+    container_name: order_db
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - order_network
+
+  # Spring Boot application service
+  app:
+    build: .  # Сборка образа из текущей директории
+    container_name: order_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/order_db   # Используем сервис db вместо localhost
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    ports:
+      - "8181:8080"  # Приложение будет доступно на порту 8181 на хост-машине
+    depends_on:
+      - db  # Зависит от сервиса db, чтобы приложение запускалось только после того, как PostgreSQL будет доступен
+    networks:
+      - order_network
+    entrypoint: ["sh", "-c", "until nc -z db 5432; do echo Waiting for PostgreSQL; sleep 2; done; java -jar /app/OrderManagementSystem.jar"]
+
+# Named volume to persist PostgreSQL data
+volumes:
+  postgres_data:
+
+# Networks
+networks:
+  order_network:
+    driver: bridge
