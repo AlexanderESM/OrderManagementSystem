@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -20,7 +22,7 @@ public class ProductRepositoryTest {
     @Test
     public void testSaveAndFindById() {
         // Создаем новый продукт
-        Product product = new Product(null, "Test Product", 50.0);
+        Product product = new Product("Test Product", 50.0, "Test Description", 100);
 
         // Сохраняем продукт в базе данных
         Product savedProduct = productRepository.save(product);
@@ -41,7 +43,7 @@ public class ProductRepositoryTest {
     @Test
     public void testDeleteProduct() {
         // Создаем и сохраняем продукт
-        Product product = new Product(null, "Test Product", 50.0);
+        Product product = new Product("Test Product", 50.0, "Test Description", 100);
         Product savedProduct = productRepository.save(product);
 
         // Проверяем, что продукт сохранен
@@ -58,15 +60,19 @@ public class ProductRepositoryTest {
     @Test
     public void testFindAllProducts() {
         // Создаем и сохраняем несколько продуктов
-        Product product1 = new Product(null, "Product 1", 10.0);
-        Product product2 = new Product(null, "Product 2", 20.0);
+        Product product1 = new Product("Product 1", 10.0, "Description 1", 100);
+        Product product2 = new Product("Product 2", 20.0, "Description 2", 200);
         productRepository.save(product1);
         productRepository.save(product2);
 
         // Получаем все продукты
-        Iterable<Product> products = productRepository.findAll();
+        List<Product> products = (List<Product>) productRepository.findAll();
 
         // Проверяем, что оба продукта были сохранены и найдены
-        assertTrue(products.spliterator().getExactSizeIfKnown() > 1, "There should be more than one product in the repository");
+        assertEquals(2, products.size(), "There should be exactly two products in the repository");
+
+        // Проверяем, что продукты содержат ожидаемые имена
+        assertTrue(products.stream().anyMatch(p -> p.getName().equals("Product 1")));
+        assertTrue(products.stream().anyMatch(p -> p.getName().equals("Product 2")));
     }
 }

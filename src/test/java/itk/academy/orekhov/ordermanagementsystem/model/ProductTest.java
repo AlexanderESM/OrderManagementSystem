@@ -1,56 +1,54 @@
 package itk.academy.orekhov.ordermanagementsystem.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductTest {
 
-    private Product product;
+    @Test
+    public void testConstructorWithId() {
+        Product product = new Product(1L, "Test Product", 99.99, "Test Description", 100);
 
-    @BeforeEach
-    public void setUp() {
-        // Используем конструктор с id, name и price
-        product = new Product(1L, "Product Name", 100.0);
+        assertEquals(1L, product.getId());
+        assertEquals("Test Product", product.getName());
+        assertEquals(99.99, product.getPrice());
+        assertEquals("Test Description", product.getDescription());
+        assertEquals(100, product.getQuantityInStock());
     }
 
     @Test
-    public void testProductConstructorAndGetters() {
-        assertEquals(1L, product.getId(), "Product ID should be 1");
-        assertEquals("Product Name", product.getName(), "Product name should be 'Product Name'");
-        assertEquals(100.0, product.getPrice(), "Product price should be 100.0");
+    public void testConstructorWithoutId() {
+        Product product = new Product("Test Product", 99.99, "Test Description", 100);
+
+        assertNull(product.getId());  // id should be null as it was not provided
+        assertEquals("Test Product", product.getName());
+        assertEquals(99.99, product.getPrice());
+        assertEquals("Test Description", product.getDescription());
+        assertEquals(100, product.getQuantityInStock());
     }
 
     @Test
-    public void testProductSetters() {
-        product.setId(2L);
+    public void testSettersAndGetters() {
+        Product product = new Product();
+
+        product.setId(1L);
         product.setName("Updated Product");
-        product.setPrice(200.0);
+        product.setPrice(149.99);
+        product.setDescription("Updated Description");
+        product.setQuantityInStock(200);
 
-        assertEquals(2L, product.getId(), "Product ID should be updated to 2");
-        assertEquals("Updated Product", product.getName(), "Product name should be updated to 'Updated Product'");
-        assertEquals(200.0, product.getPrice(), "Product price should be updated to 200.0");
+        assertEquals(1L, product.getId());
+        assertEquals("Updated Product", product.getName());
+        assertEquals(149.99, product.getPrice());
+        assertEquals("Updated Description", product.getDescription());
+        assertEquals(200, product.getQuantityInStock());
     }
 
     @Test
-    public void testEqualsAndHashCode() {
-        Product product1 = new Product(1L, "Product Name", 100.0);
-        Product product2 = new Product(1L, "Product Name", 100.0);
-        Product product3 = new Product(2L, "Different Product", 150.0);
+    public void testToString() {
+        Product product = new Product(1L, "Test Product", 99.99, "Test Description", 100);
 
-        assertEquals(product1, product2, "Products with the same ID should be equal");
-        assertNotEquals(product1, product3, "Products with different IDs should not be equal");
-
-        assertEquals(product1.hashCode(), product2.hashCode(), "Hash codes for equal products should be the same");
-        assertNotEquals(product1.hashCode(), product3.hashCode(), "Hash codes for different products should be different");
-    }
-
-    @Test
-    public void testDefaultConstructor() {
-        Product defaultProduct = new Product();
-        assertNull(defaultProduct.getId(), "Default product ID should be null");
-        assertNull(defaultProduct.getName(), "Default product name should be null");
-        assertNull(defaultProduct.getPrice(), "Default product price should be null");
+        String expectedString = "Product{id=1, name='Test Product', price=99.99, description='Test Description', quantityInStock=100}";
+        assertEquals(expectedString, product.toString());
     }
 }

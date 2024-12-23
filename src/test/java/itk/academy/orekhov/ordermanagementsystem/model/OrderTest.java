@@ -25,8 +25,8 @@ public class OrderTest {
     @Test
     public void testOrderValid() {
         Customer customer = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, customer, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", 25.0, "Completed");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -36,8 +36,8 @@ public class OrderTest {
 
     @Test
     public void testOrderInvalidWithoutCustomer() {
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, null, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", 25.0, "Completed");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -58,8 +58,8 @@ public class OrderTest {
     @Test
     public void testInvalidOrderDate() {
         Customer customer = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, customer, Arrays.asList(product1, product2), "", "123 Street, City", 25.0, "Completed");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -70,8 +70,8 @@ public class OrderTest {
     @Test
     public void testInvalidShippingAddress() {
         Customer customer = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, customer, Arrays.asList(product1, product2), "2024-12-23", "", 25.0, "Completed");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -82,8 +82,8 @@ public class OrderTest {
     @Test
     public void testInvalidTotalPrice() {
         Customer customer = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, customer, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", -5.0, "Completed");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -94,8 +94,8 @@ public class OrderTest {
     @Test
     public void testInvalidOrderStatus() {
         Customer customer = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
         Order order = new Order(1L, customer, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", 25.0, "");
 
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -106,8 +106,8 @@ public class OrderTest {
     @Test
     public void testEqualsAndHashCode() {
         Customer customer1 = new Customer(1L, "John", "Doe", "john.doe@example.com", "1234567890");
-        Product product1 = new Product(1L, "Product 1", 10.0);
-        Product product2 = new Product(2L, "Product 2", 15.0);
+        Product product1 = new Product(1L, "Product 1", 10.0, "Test Description", 100);
+        Product product2 = new Product(2L, "Product 2", 15.0, "Test Description", 200);
 
         Order order1 = new Order(1L, customer1, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", 25.0, "Completed");
         Order order2 = new Order(1L, customer1, Arrays.asList(product1, product2), "2024-12-23", "123 Street, City", 25.0, "Completed");
